@@ -22,6 +22,7 @@ module.exports.saveTodo = async (req, res) => {
 module.exports.updateTodo = async (req, res) => {
     const { text } = req.body;
     const { id } = req.params;
+    console.log(id,text);
     ToDoModel
     .findByIdAndUpdate(id,{text})
     .then((todo) =>{

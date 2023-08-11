@@ -1,25 +1,50 @@
 import { useEffect, useState } from "react";
 import ToDo from "./components/ToDo";
-import { getAllToDo } from "./utils/handleApi";
+import { addToDo, updateToDo, getAllToDo, deleteToDo } from "./utils/handleApi";
 
 
 function App() {
-  const [toDo, setToDo]= useState([])
+  const [toDo, setToDo]= useState([]);
+  const [text, setText]= useState("");
+  const [isUpdating, setIsUpdating]=useState(false);
+  const [todoID, setToDoID]= useState("");
 
   useEffect(()=>{
     getAllToDo(setToDo)
   }, [])
 
+  const updateMode = (_id, text)=>{
+    setIsUpdating(true);
+    setText(text);
+    setToDoID(_id);
+  }
   return (
     <div className="App">
       <div className="container">
         <h1>App ToDo</h1>
         <div className="top">
-          <input type="text" placeholder="Add ToDo..." />
-          <div className="add">Add</div>
+          <input 
+          type="text" 
+          placeholder="Add ToDo..." 
+          value={text}
+          onChange={(e)=> setText(e.target.value)}
+          />
+          <div className="add" onClick={
+            isUpdating?
+            ()=> updateToDo(todoID, text, setText, setToDo, setIsUpdating)
+            :()=> addToDo(text, setText, setToDo)
+            }>
+            {isUpdating?"Update":"Add"}
+          </div>
         </div>
         <div className="list">
-          {toDo.map((item)=> <ToDo key={item._id} text={item.text}/>)}
+          {toDo.map((item)=> 
+          <ToDo 
+          key={item._id} 
+          text={item.text}
+          updateMode={()=> updateMode(item._id, item.text)}
+          deleteToDo={()=> deleteToDo(item._id, setToDo)}
+          />)}
         </div>
       </div>
     </div>
