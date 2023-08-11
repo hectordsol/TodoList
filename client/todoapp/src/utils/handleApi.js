@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const dbURL = "https://todolist-mnux.onrender.com/";
+const dbURL = "https://todolist-mnux.onrender.com";
 
 const getAllToDo = (setToDo) =>{
     axios
